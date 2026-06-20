@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bv4tw6fbkbv80"]
+
+[ext_resource type="Script" uid="uid://uc3adaxmcond" path="res://Script/slide.gd" id="1_8moo8"]
+[ext_resource type="Script" uid="uid://cy23x2kt567jw" path="res://Script/area_3d.gd" id="2_850j5"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_wowpa"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wrm1d"]
+
+[node name="Slide" type="Node3D" unique_id=1673529201]
+script = ExtResource("1_8moo8")
+
+[node name="StartMarker" type="Area3D" parent="." unique_id=1083729269]
+script = ExtResource("2_850j5")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StartMarker" unique_id=1170956858]
+mesh = SubResource("SphereMesh_wowpa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartMarker" unique_id=943619467]
+shape = SubResource("SphereShape3D_wrm1d")
+
+[node name="EndMarker" type="MeshInstance3D" parent="." unique_id=1091725975]
+mesh = SubResource("SphereMesh_wowpa")
+
+[node name="NavigationLink3D" type="NavigationLink3D" parent="." unique_id=1293444823]
+bidirectional = false
+travel_cost = 0.0
+
+[connection signal="body_entered" from="StartMarker" to="." method="_on_area_3d_body_entered"]
