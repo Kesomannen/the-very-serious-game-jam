@@ -1,3 +1,26 @@
 [gd_scene format=3 uid="uid://co3d1m1ybskbt"]
 
+[ext_resource type="Material" uid="uid://bt2f2vdwj60uo" path="res://gound.tres" id="1_7q7q3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vkdvt"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7q7q3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bi5fs"]
+vertex_color_use_as_albedo = true
+
 [node name="Node3D" type="Node3D" unique_id=1816040432]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=2048727428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7030796, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=5845493]
+shape = SubResource("BoxShape3D_vkdvt")
+debug_color = Color(0, 0.4520604, 0.7077407, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=447420932]
+transform = Transform3D(4.8245406, 0, 0, 0, 0.17021668, 0, 0, 0, 4.7263937, 0, 0, 0)
+material_override = ExtResource("1_7q7q3")
+mesh = SubResource("BoxMesh_7q7q3")
+surface_material_override/0 = SubResource("StandardMaterial3D_bi5fs")
+metadata/_edit_group_ = true
