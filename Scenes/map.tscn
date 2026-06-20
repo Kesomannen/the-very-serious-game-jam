@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cx2t1q2p1shqk"]
+
+[ext_resource type="PackedScene" uid="uid://th82qk06sg1s" path="res://Playground V1.fbx" id="1_ci6au"]
+
+[node name="Playground Map" unique_id=106890926 instance=ExtResource("1_ci6au")]
+
+[node name="floor" parent="." index="7" unique_id=1325975664]
+transform = Transform3D(-2444.1348, 0, 0, 0, 0.0001068365, 2444.1343, 0, -2444.1343, 0.0001068365, -1494.857, -5.175, -10.124)

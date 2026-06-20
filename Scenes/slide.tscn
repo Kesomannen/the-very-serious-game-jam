@@ -19,8 +19,14 @@ mesh = SubResource("SphereMesh_wowpa")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StartMarker" unique_id=943619467]
 shape = SubResource("SphereShape3D_wrm1d")
 
+[node name="Marker3D" type="Marker3D" parent="StartMarker" unique_id=845909651]
+gizmo_extents = 1.25
+
 [node name="EndMarker" type="MeshInstance3D" parent="." unique_id=1091725975]
 mesh = SubResource("SphereMesh_wowpa")
+
+[node name="Marker3D" type="Marker3D" parent="EndMarker" unique_id=894024898]
+gizmo_extents = 2.0
 
 [node name="NavigationLink3D" type="NavigationLink3D" parent="." unique_id=1293444823]
 bidirectional = false

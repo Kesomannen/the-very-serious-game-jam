@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://co3d1m1ybskbt"]
 
 [ext_resource type="Script" uid="uid://p5gibq5hgl5q" path="res://Script/player.gd" id="1_qxrlw"]
-[ext_resource type="PackedScene" uid="uid://ch00lw4lbwy4w" path="res://Scenes/playground.tscn" id="2_wrm1d"]
 [ext_resource type="Script" uid="uid://bp73hplvjaujn" path="res://Script/manager.gd" id="3_3dryh"]
 [ext_resource type="PackedScene" uid="uid://ct0ny20uc0fjn" path="res://Scenes/child.tscn" id="3_wrm1d"]
+[ext_resource type="PackedScene" uid="uid://ssp63i5rmfhq" path="res://Scenes/playground2.tscn" id="4_3dryh"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bi5fs"]
 
@@ -25,10 +25,8 @@ debug_color = Color(0, 0.4520604, 0.7077407, 1)
 transform = Transform3D(1, 0, -5.9604638e-08, 0, 1, 0, 5.9604638e-08, 0, 1, -0.020141363, 0.8557229, -0.12589025)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2088965365]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37475586, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37475586, 4.271158)
 mesh = SubResource("CapsuleMesh_okq71")
-
-[node name="Playground" parent="." unique_id=1866652480 instance=ExtResource("2_wrm1d")]
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=116938391]
 transform = Transform3D(0.83676434, 0.5040346, -0.21394995, 0, 0.39073107, 0.92050487, 0.5475632, -0.7702457, 0.32694983, 0, 15.156977, 0)
@@ -51,17 +49,17 @@ color = Color(0, 0.53929514, 0.9570392, 1)
 manager = NodePath("..")
 
 [node name="Child3" parent="Manager" unique_id=1378834187 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.312727, 0.85373735, 9.042296)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.312727, 2.0049596, 9.042296)
 color = Color(0.918256, 0.41156024, 0.8258839, 1)
 manager = NodePath("..")
 
 [node name="Child4" parent="Manager" unique_id=1026505759 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8253384, 0.85373735, 7.2971954)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.041608, 6.6359787, -3.4069524)
 color = Color(0.617164, 0.35728225, 0.9949085, 1)
 manager = NodePath("..")
 
 [node name="Child5" parent="Manager" unique_id=927383164 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08307743, 0.85373735, 1.9378266)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.745771, 4.394682, 1.9378266)
 color = Color(0.80222464, 0.4173377, 0, 1)
 manager = NodePath("..")
 
@@ -78,3 +76,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9994674, 4.1128373, -0.070
 
 [node name="SafeSpot3" type="Node3D" parent="Manager" unique_id=2136604037]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2167, 0.6616559, -5.9486437)
+
+[node name="NavigationRegion3D" parent="Manager" unique_id=1866652480 instance=ExtResource("4_3dryh")]
+transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
