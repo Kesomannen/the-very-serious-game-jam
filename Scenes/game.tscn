@@ -1,32 +1,11 @@
 [gd_scene format=3 uid="uid://co3d1m1ybskbt"]
 
-[ext_resource type="Script" uid="uid://p5gibq5hgl5q" path="res://Script/player.gd" id="1_qxrlw"]
 [ext_resource type="Script" uid="uid://bp73hplvjaujn" path="res://Script/manager.gd" id="3_3dryh"]
 [ext_resource type="PackedScene" uid="uid://ct0ny20uc0fjn" path="res://Scenes/child.tscn" id="3_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://ssp63i5rmfhq" path="res://Scenes/playground2.tscn" id="4_3dryh"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bi5fs"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_okq71"]
+[ext_resource type="PackedScene" uid="uid://bo36akh27pkvs" path="res://Scenes/freecam.tscn" id="4_wowpa"]
 
 [node name="Node3D" type="Node3D" unique_id=1816040432]
-
-[node name="Player" type="CharacterBody3D" parent="." unique_id=2048727428]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.474018, 5.1337337, -1.1367812)
-script = ExtResource("1_qxrlw")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=5845493]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3783722, 0)
-shape = SubResource("CapsuleShape3D_bi5fs")
-debug_color = Color(0, 0.4520604, 0.7077407, 1)
-
-[node name="Camera3D" type="Camera3D" parent="Player" unique_id=2142862974]
-transform = Transform3D(1, 0, -5.9604638e-08, 0, 1, 0, 5.9604638e-08, 0, 1, -0.020141363, 0.8557229, -0.12589025)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2088965365]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37475586, 4.271158)
-mesh = SubResource("CapsuleMesh_okq71")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=116938391]
 transform = Transform3D(0.83676434, 0.5040346, -0.21394995, 0, 0.39073107, 0.92050487, 0.5475632, -0.7702457, 0.32694983, 0, 15.156977, 0)
@@ -79,3 +58,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.383301, 5.973192, -4.94864
 
 [node name="NavigationRegion3D" parent="." unique_id=1866652480 instance=ExtResource("4_3dryh")]
 transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
+
+[node name="Player" parent="." unique_id=1913763412 instance=ExtResource("4_wowpa")]

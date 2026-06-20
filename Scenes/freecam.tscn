@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bo36akh27pkvs"]
+
+[ext_resource type="Script" uid="uid://c1t7xrkixrtp1" path="res://Script/freecam_player.gd" id="1_ntxpu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bi5fs"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_okq71"]
+
+[node name="Player" type="CharacterBody3D" unique_id=1913763412]
+script = ExtResource("1_ntxpu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=858191090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3783722, 0)
+shape = SubResource("CapsuleShape3D_bi5fs")
+debug_color = Color(0, 0.4520604, 0.7077407, 1)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1178320406]
+transform = Transform3D(1, 0, -5.9604638e-08, 0, 1, 0, 5.9604638e-08, 0, 1, -0.020141363, 0.8557229, -0.12589025)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=721234480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37475586, 4.271158)
+mesh = SubResource("CapsuleMesh_okq71")
