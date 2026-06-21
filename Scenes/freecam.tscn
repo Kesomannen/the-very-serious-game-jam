@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bo36akh27pkvs"]
 
-[ext_resource type="Script" uid="uid://c1t7xrkixrtp1" path="res://Script/freecam_player.gd" id="1_ntxpu"]
+[ext_resource type="Script" uid="uid://c1t7xrkixrtp1" path="res://Scripts/freecam_player.gd" id="1_ntxpu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bi5fs"]
 

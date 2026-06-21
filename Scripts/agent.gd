@@ -4,16 +4,19 @@ extends CharacterBody3D
 
 @export var movement_speed: float = 10.0
 @export var color: Color
-@export var is_it: bool
 @export var manager: Manager
 @export var state: String
+@export var flee_state := AgentFleeLogic.State.WANDER
 
 @onready var navigation_agent: NavigationAgent3D = get_node("NavigationAgent3D")
 
 var chase_state := AgentChaseLogic.State.IDLE
-@export var flee_state := AgentFleeLogic.State.WANDER
 var wander_target := Vector3.ZERO
+
+var is_it := false
 var sliding := false
+var active := false
+
 var mat: Material
 
 var chase_logic := AgentChaseLogic.new()
@@ -29,7 +32,13 @@ func _ready() -> void:
 	pick_new_wander_target()
 	update_behavior_state()
 
+
 func _physics_process(delta: float) -> void:
+	if !active:
+		navigation_agent.set_velocity_forced(Vector3.ZERO)
+		velocity = Vector3.ZERO
+		return
+		
 	if sliding:
 		return
 
@@ -105,7 +114,7 @@ func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	move_and_slide()
 
 func _on_tag_area_body_entered(body: Node3D) -> void:
-	if body is not Agent or body == self or !is_it or body.is_it:
+	if !active or body is not Agent or body == self or !is_it or body.is_it:
 		return
 
 	print(name, " tagged ", body.name)
@@ -113,6 +122,8 @@ func _on_tag_area_body_entered(body: Node3D) -> void:
 	body.update_behavior_state()
 
 func _on_timer_timeout() -> void:
+	if !active:
+		return
 	update_behavior_state()
 
 func pick_new_wander_target() -> void:

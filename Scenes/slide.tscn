@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bv4tw6fbkbv80"]
 
-[ext_resource type="Script" uid="uid://uc3adaxmcond" path="res://Script/slide.gd" id="1_8moo8"]
-[ext_resource type="Script" uid="uid://cy23x2kt567jw" path="res://Script/area_3d.gd" id="2_850j5"]
+[ext_resource type="Script" uid="uid://uc3adaxmcond" path="res://Scripts/slide.gd" id="1_8moo8"]
+[ext_resource type="Script" uid="uid://cy23x2kt567jw" path="res://Scripts/area_3d.gd" id="2_850j5"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_wowpa"]
 

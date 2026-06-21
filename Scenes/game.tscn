@@ -1,65 +1,91 @@
 [gd_scene format=3 uid="uid://co3d1m1ybskbt"]
 
-[ext_resource type="Script" uid="uid://bp73hplvjaujn" path="res://Script/manager.gd" id="3_3dryh"]
+[ext_resource type="Script" uid="uid://bp73hplvjaujn" path="res://Scripts/manager.gd" id="3_3dryh"]
 [ext_resource type="PackedScene" uid="uid://ct0ny20uc0fjn" path="res://Scenes/child.tscn" id="3_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://ssp63i5rmfhq" path="res://Scenes/playground2.tscn" id="4_3dryh"]
 [ext_resource type="PackedScene" uid="uid://bo36akh27pkvs" path="res://Scenes/freecam.tscn" id="4_wowpa"]
+[ext_resource type="Script" uid="uid://b5wtsa44ye62f" path="res://Scripts/bet_manager.gd" id="5_wowpa"]
 
 [node name="Node3D" type="Node3D" unique_id=1816040432]
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=116938391]
 transform = Transform3D(0.83676434, 0.5040346, -0.21394995, 0, 0.39073107, 0.92050487, 0.5475632, -0.7702457, 0.32694983, 0, 15.156977, 0)
 
-[node name="Manager" type="Node" parent="." unique_id=902847566 node_paths=PackedStringArray("children", "safe_spots")]
+[node name="Manager" type="Node" parent="." unique_id=902847566 node_paths=PackedStringArray("children", "starting_spots", "safe_spots")]
 unique_name_in_owner = true
 script = ExtResource("3_3dryh")
-children = [NodePath("Child"), NodePath("Child2"), NodePath("Child3"), NodePath("Child4"), NodePath("Child5"), NodePath("Child6")]
-safe_spots = [NodePath("SafeSpot"), NodePath("SafeSpot2"), NodePath("SafeSpot3"), NodePath("SafeSpotHigh")]
+children = [NodePath("Green"), NodePath("Blue"), NodePath("Pink"), NodePath("Purple"), NodePath("Orange"), NodePath("Cyan")]
+starting_spots = [NodePath("StartingSpots/StartingSpot1"), NodePath("StartingSpots/StartingSpot2"), NodePath("StartingSpots/StartingSpot3"), NodePath("StartingSpots/StartingSpot4"), NodePath("StartingSpots/StartingSpot5"), NodePath("StartingSpots/StartingSpot6")]
+safe_spots = [NodePath("SafeSpots/SafeSpot1"), NodePath("SafeSpots/SafeSpot2"), NodePath("SafeSpots/SafeSpot3"), NodePath("SafeSpots/SafeSpotHigh")]
 
-[node name="Child" parent="Manager" unique_id=997781014 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
+[node name="Green" parent="Manager" unique_id=997781014 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3377075, 0.73119307, -6.867942)
 color = Color(0, 1, 0, 1)
-is_it = true
 manager = NodePath("..")
 
-[node name="Child2" parent="Manager" unique_id=549556755 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
+[node name="Blue" parent="Manager" unique_id=549556755 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9007196, 0.9281266, -8.598083)
 color = Color(0, 0.53929514, 0.9570392, 1)
 manager = NodePath("..")
 
-[node name="Child3" parent="Manager" unique_id=1378834187 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
+[node name="Pink" parent="Manager" unique_id=1378834187 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.312727, 2.0049596, 9.042296)
 color = Color(0.918256, 0.41156024, 0.8258839, 1)
 manager = NodePath("..")
 
-[node name="Child4" parent="Manager" unique_id=1026505759 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
+[node name="Purple" parent="Manager" unique_id=1026505759 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.041608, 6.6359787, -3.4069524)
 color = Color(0.617164, 0.35728225, 0.9949085, 1)
 manager = NodePath("..")
 
-[node name="Child5" parent="Manager" unique_id=927383164 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
+[node name="Orange" parent="Manager" unique_id=927383164 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.745771, 4.394682, 1.9378266)
 color = Color(0.80222464, 0.4173377, 0, 1)
 manager = NodePath("..")
 
-[node name="Child6" parent="Manager" unique_id=800561201 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
+[node name="Cyan" parent="Manager" unique_id=800561201 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.009304, 0.85373735, 0.27600813)
 color = Color(0, 0.62166023, 0.5445527, 1)
 manager = NodePath("..")
 
-[node name="SafeSpot" type="Node3D" parent="Manager" unique_id=180060406]
+[node name="SafeSpots" type="Node" parent="Manager" unique_id=1626592082]
+
+[node name="SafeSpot1" type="Node3D" parent="Manager/SafeSpots" unique_id=180060406]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.917459, 3.2, 2.9319158)
 
-[node name="SafeSpot2" type="Node3D" parent="Manager" unique_id=2028002239]
+[node name="SafeSpot2" type="Node3D" parent="Manager/SafeSpots" unique_id=2028002239]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.793418, 3.3128374, 3.3310966)
 
-[node name="SafeSpot3" type="Node3D" parent="Manager" unique_id=2136604037]
+[node name="SafeSpot3" type="Node3D" parent="Manager/SafeSpots" unique_id=2136604037]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.383301, 5.973192, -4.9486437)
 
-[node name="SafeSpotHigh" type="Node3D" parent="Manager" unique_id=787376383]
+[node name="SafeSpotHigh" type="Node3D" parent="Manager/SafeSpots" unique_id=787376383]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 6.6, -4.4)
+
+[node name="StartingSpots" type="Node" parent="Manager" unique_id=940777437]
+
+[node name="StartingSpot1" type="Node3D" parent="Manager/StartingSpots" unique_id=174341208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.417459, 0.70000005, 9.031916)
+
+[node name="StartingSpot2" type="Node3D" parent="Manager/StartingSpots" unique_id=653701245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.117458, 0.40000004, 0.23191565)
+
+[node name="StartingSpot3" type="Node3D" parent="Manager/StartingSpots" unique_id=2027955948]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11745834, 0.40000004, 4.3319154)
+
+[node name="StartingSpot4" type="Node3D" parent="Manager/StartingSpots" unique_id=1318407521]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8825417, 0.40000004, -8.668085)
+
+[node name="StartingSpot5" type="Node3D" parent="Manager/StartingSpots" unique_id=1451144030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3825417, 0.40000004, -6.868085)
+
+[node name="StartingSpot6" type="Node3D" parent="Manager/StartingSpots" unique_id=1847787943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1174583, 6.3, -3.368085)
 
 [node name="NavigationRegion3D" parent="." unique_id=1866652480 instance=ExtResource("4_3dryh")]
 transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
 
 [node name="Player" parent="." unique_id=1913763412 instance=ExtResource("4_wowpa")]
+
+[node name="BetManager" type="Node" parent="." unique_id=108292606]
+script = ExtResource("5_wowpa")
