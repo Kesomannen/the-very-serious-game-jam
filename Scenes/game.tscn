@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bp73hplvjaujn" path="res://Scripts/manager.gd" id="3_3dryh"]
 [ext_resource type="PackedScene" uid="uid://ct0ny20uc0fjn" path="res://Scenes/child.tscn" id="3_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://ssp63i5rmfhq" path="res://Scenes/playground2.tscn" id="4_3dryh"]
-[ext_resource type="PackedScene" uid="uid://bo36akh27pkvs" path="res://Scenes/freecam.tscn" id="4_wowpa"]
+[ext_resource type="PackedScene" uid="uid://c1tortkjbcuha" path="res://Scenes/player.tscn" id="5_i6g32"]
 [ext_resource type="Script" uid="uid://b5wtsa44ye62f" path="res://Scripts/bet_manager.gd" id="5_wowpa"]
 
 [node name="Node3D" type="Node3D" unique_id=1816040432]
@@ -11,12 +11,14 @@
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=116938391]
 transform = Transform3D(0.83676434, 0.5040346, -0.21394995, 0, 0.39073107, 0.92050487, 0.5475632, -0.7702457, 0.32694983, 0, 15.156977, 0)
 
-[node name="Manager" type="Node" parent="." unique_id=902847566 node_paths=PackedStringArray("children", "starting_spots", "safe_spots")]
+[node name="BetManager" type="Node" parent="." unique_id=108292606 node_paths=PackedStringArray("lineup_point")]
+script = ExtResource("5_wowpa")
+spacing = 1.2
+lineup_point = NodePath("../LineupPoint")
+
+[node name="Manager" type="Node" parent="." unique_id=902847566]
 unique_name_in_owner = true
 script = ExtResource("3_3dryh")
-children = [NodePath("Green"), NodePath("Blue"), NodePath("Pink"), NodePath("Purple"), NodePath("Orange"), NodePath("Cyan")]
-starting_spots = [NodePath("StartingSpots/StartingSpot1"), NodePath("StartingSpots/StartingSpot2"), NodePath("StartingSpots/StartingSpot3"), NodePath("StartingSpots/StartingSpot4"), NodePath("StartingSpots/StartingSpot5"), NodePath("StartingSpots/StartingSpot6")]
-safe_spots = [NodePath("SafeSpots/SafeSpot1"), NodePath("SafeSpots/SafeSpot2"), NodePath("SafeSpots/SafeSpot3"), NodePath("SafeSpots/SafeSpotHigh")]
 
 [node name="Green" parent="Manager" unique_id=997781014 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3377075, 0.73119307, -6.867942)
@@ -85,8 +87,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1174583, 6.3, -3.368085)
 [node name="NavigationRegion3D" parent="." unique_id=1866652480 instance=ExtResource("4_3dryh")]
 transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
 
-[node name="Player" parent="." unique_id=1913763412 instance=ExtResource("4_wowpa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9089975, 17.822548)
+[node name="LineupPoint" type="Node3D" parent="." unique_id=85703367]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8428072, 14)
 
-[node name="BetManager" type="Node" parent="." unique_id=108292606]
-script = ExtResource("5_wowpa")
+[node name="Player" parent="." unique_id=1913763412 instance=ExtResource("5_i6g32")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.716, 19.743)
+starting_state = 0

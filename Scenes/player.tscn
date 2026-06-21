@@ -7,6 +7,7 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_okq71"]
 
 [node name="Player" type="CharacterBody3D" unique_id=1913763412]
+collision_layer = 2
 script = ExtResource("1_v0iea")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=858191090]
@@ -16,7 +17,9 @@ debug_color = Color(0, 0.4520604, 0.7077407, 1)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1178320406]
 transform = Transform3D(1, 0, -5.9604638e-08, 0, 1, 0, 5.9604638e-08, 0, 1, -0.020141363, 0.8557229, -0.12589025)
+cull_mask = 1048573
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=721234480]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37475586, 4.271158)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37475586, -0.02884207)
+layers = 2
 mesh = SubResource("CapsuleMesh_okq71")

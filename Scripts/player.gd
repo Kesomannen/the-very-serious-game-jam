@@ -1,15 +1,73 @@
+class_name Player
+
 extends CharacterBody3D
 
+@export var freecam_movement_speed := 10.0
+@export var boost_multiplier := 3.0
+@export var mouse_sensitivity := 0.002
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-var mouse_sensitivity = 0.002
-var sliding = false;
+@export var movement_speed := 5.0
+@export var jump_velocity := 4.5
+@export var starting_state := State.Freecam
+
+@export var scout_fov := 30.0
+@export var scout_mouse_sensitivity_multiplier := 0.5
+
+@export var betting_fov := 50.0
+
+@onready var camera: Camera3D = $Camera3D
+
+var state: State
+
+var _pitch: float
+var _default_fov: float
+
+var sliding = false
+
+enum State {
+	Betting,
+	Scouting,
+	Running,
+	Freecam
+}
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	camera.current = true
+	_default_fov = camera.fov
+	_pitch = camera.rotation.x
+	_enter(starting_state)
+
+func enter_scouting():
+	_enter(State.Scouting)
+
+func _enter(new_state: State):
+	match state:
+		State.Scouting:
+			camera.fov = scout_fov
+		State.Betting:
+			camera.fov = betting_fov
+		_:
+			camera.fov = _default_fov
+	
+	match new_state:
+		State.Betting:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		State.Running, State.Freecam, State.Scouting:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	state = new_state
 
 func _physics_process(delta: float) -> void:
+	match state:
+		State.Betting:
+			pass
+		State.Scouting:
+			pass
+		State.Running:
+			_running_physics_process(delta)
+		State.Freecam:
+			_freecam_physics_process(delta)
+
+func _running_physics_process(delta: float):
 	if sliding:
 		return;
 	# Add the gravity.
@@ -18,27 +76,54 @@ func _physics_process(delta: float) -> void:
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+		velocity.y = jump_velocity
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * movement_speed
+		velocity.z = direction.z * movement_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, movement_speed)
+		velocity.z = move_toward(velocity.z, 0, movement_speed)
 
 	move_and_slide()
 
+func _freecam_physics_process(delta: float):
+	var input_dir := Input.get_vector("left", "right", "forward", "backward")
+	var direction := Vector3.ZERO
+	var camera_basis := camera.global_transform.basis
+
+	direction += camera_basis.x * input_dir.x
+	direction += camera_basis.z * input_dir.y
+
+	if Input.is_action_pressed("jump") or Input.is_physical_key_pressed(KEY_E):
+		direction += Vector3.UP
+	if Input.is_physical_key_pressed(KEY_Q) or Input.is_physical_key_pressed(KEY_CTRL):
+		direction += Vector3.DOWN
+
+	var speed := freecam_movement_speed
+	if Input.is_physical_key_pressed(KEY_SHIFT):
+		speed *= boost_multiplier
+
+	if direction != Vector3.ZERO:
+		global_position += direction.normalized() * speed * delta
 
 func _input(event):
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * mouse_sensitivity)
-		$Camera3D.rotate_x(-event.relative.y * mouse_sensitivity)
-		$Camera3D.rotation.x = clampf($Camera3D.rotation.x, -deg_to_rad(70), deg_to_rad(70))
+	if event is not InputEventMouseMotion or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		return
+	match state:
+		State.Betting:
+			pass
+		State.Freecam, State.Running, State.Scouting:
+			var multiplier = scout_mouse_sensitivity_multiplier if state == State.Scouting else 1
+			var sensitivity = mouse_sensitivity * multiplier
+			rotate_y(-event.relative.x * sensitivity)
+			_pitch = clampf(_pitch - event.relative.y * sensitivity, -PI * 0.49, PI * 0.49)
+			camera.rotation.x = _pitch
+			#get_viewport().set_input_as_handled()
 
 func on_slide_enter():
 	sliding = true

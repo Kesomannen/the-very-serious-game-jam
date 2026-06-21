@@ -33,9 +33,6 @@ func start_playing():
 	if is_playing:
 		print("Tried to start game while already playing!")
 		return
-	if !children.any(func(child): return child.is_it):
-		print("start_playing was called without chasers, picking one randomly")
-		pick_chaser()
 	spawn_children_randomly()
 	set_children_active(true)
 	is_playing = true
@@ -67,4 +64,4 @@ func pick_chaser():
 
 func set_children_active(active: bool):
 	for child in children:
-		child.active = active
+		child.set_active(active)

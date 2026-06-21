@@ -15,7 +15,7 @@ var wander_target := Vector3.ZERO
 
 var is_it := false
 var sliding := false
-var active := false
+var _active := false
 
 var mat: Material
 
@@ -32,10 +32,11 @@ func _ready() -> void:
 	movement.randomize_stamina()
 	pick_new_wander_target()
 	update_behavior_state()
+	set_active(_active)
 
 
 func _physics_process(delta: float) -> void:
-	if !active:
+	if !_active:
 		navigation_agent.set_velocity_forced(Vector3.ZERO)
 		velocity = Vector3.ZERO
 		return
@@ -121,7 +122,7 @@ func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	move_and_slide()
 
 func _on_tag_area_body_entered(body: Node3D) -> void:
-	if !active or body is not Agent or body == self or !is_it or body.is_it or chase_logic.is_in_cooldown():
+	if !_active or body is not Agent or body == self or !is_it or body.is_it or chase_logic.is_in_cooldown():
 		return
 
 	print(name, " tagged ", body.name)
@@ -132,9 +133,13 @@ func _on_tag_area_body_entered(body: Node3D) -> void:
 	body.update_behavior_state()
 
 func _on_timer_timeout() -> void:
-	if !active:
+	if !_active:
 		return
 	update_behavior_state()
 
 func pick_new_wander_target() -> void:
 	wander_target = Vector3(randf_range(-10, 10), global_position.y, randf_range(-10, 10))
+
+func set_active(active: bool):
+	_active = active
+	$TagArea.process_mode = Node.PROCESS_MODE_INHERIT if _active else Node.PROCESS_MODE_DISABLED
