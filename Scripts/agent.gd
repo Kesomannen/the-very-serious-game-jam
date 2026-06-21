@@ -10,7 +10,7 @@ extends CharacterBody3D
 
 @onready var navigation_agent: NavigationAgent3D = get_node("NavigationAgent3D")
 
-var chase_state := AgentChaseLogic.State.IDLE
+var chase_state := AgentChaseLogic.State.WATCHING
 var wander_target := Vector3.ZERO
 
 var is_it := false
@@ -22,6 +22,7 @@ var mat: Material
 var chase_logic := AgentChaseLogic.new()
 var flee_logic := AgentFleeLogic.new()
 var movement := AgentMovement.new()
+var awareness := AgentAwareness.new()
 
 func _ready() -> void:
 	mat = $MeshInstance3D.get_surface_override_material(0).duplicate()
@@ -89,6 +90,12 @@ func get_taggers() -> Array[Agent]:
 func get_runners() -> Array[Agent]:
 	return manager.children.filter(func(child): return !child.is_it)
 
+func visible_targets() -> Array[Agent]:
+	return awareness.visible_targets(self)
+
+func visible_taggers() -> Array[Agent]:
+	return awareness.visible_taggers(self)
+
 func get_closest_child(children: Array[Agent]) -> Agent:
 	var closest_distance := INF
 	var closest: Agent = null
@@ -114,11 +121,14 @@ func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	move_and_slide()
 
 func _on_tag_area_body_entered(body: Node3D) -> void:
-	if !active or body is not Agent or body == self or !is_it or body.is_it:
+	if !active or body is not Agent or body == self or !is_it or body.is_it or chase_logic.is_in_cooldown():
 		return
 
 	print(name, " tagged ", body.name)
 	body.is_it = true
+	chase_logic.start_tag_cooldown()
+	body.chase_logic.start_tag_cooldown()
+	update_behavior_state()
 	body.update_behavior_state()
 
 func _on_timer_timeout() -> void:
