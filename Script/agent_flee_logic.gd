@@ -4,15 +4,19 @@ extends RefCounted
 
 enum State {
 	WANDER,
+	ALERT,
 	FLEE,
-	PANIC,
 }
 
-const PANIC_DISTANCE := 4.0
-const FLEE_DISTANCE := 12.0
-const PANIC_TARGET_MULTIPLIER := 4.0
-const WANDER_TARGET_RADIUS_SQUARED := 2.0
+const ALERT_DISTANCE := 12.0
+const FLEE_DISTANCE := 4.0
+const FLEE_MEMORY_SECONDS := 5.0
+const FLEE_TARGET_MULTIPLIER := 4.0
 const MIN_REPULSE_DISTANCE := 0.001
+const SAFE_SPOT_TRAVEL_WEIGHT := 0.2
+const SHAKE_BUDDY_BONUS := 3.0
+
+var flee_until_msec := 0
 
 func update(agent: Agent) -> void:
 	var taggers := agent.get_taggers()
@@ -22,24 +26,25 @@ func update(agent: Agent) -> void:
 		return
 
 	var distance := agent.global_position.distance_to(closest_tagger.global_position)
-	if distance < PANIC_DISTANCE:
-		set_panic(agent, closest_tagger)
-	elif distance < FLEE_DISTANCE:
-		set_flee(agent, taggers)
+	if distance < FLEE_DISTANCE:
+		set_flee(agent, closest_tagger, true)
+	elif should_keep_fleeing():
+		set_flee(agent, closest_tagger, false)
+	elif distance < ALERT_DISTANCE:
+		set_alert(agent, taggers)
 	else:
 		set_wander(agent)
 
-func update_wander_target(agent: Agent) -> void:
-	if agent.flee_state == State.WANDER and agent.global_position.distance_squared_to(agent.wander_target) < WANDER_TARGET_RADIUS_SQUARED:
-		agent.pick_new_wander_target()
+func update_wander_target(_agent: Agent) -> void:
+	pass
 
 func get_speed(agent: Agent) -> float:
 	match agent.flee_state:
 		State.WANDER:
 			return agent.movement_speed * 0.5
-		State.FLEE:
+		State.ALERT:
 			return agent.movement_speed * 0.8
-		State.PANIC:
+		State.FLEE:
 			return agent.movement_speed * 1.1
 		_:
 			return agent.movement_speed
@@ -58,9 +63,9 @@ func get_steering(agent: Agent) -> Vector3:
 	match agent.flee_state:
 		State.WANDER:
 			return repulse
-		State.FLEE:
+		State.ALERT:
 			return repulse * 0.2
-		State.PANIC:
+		State.FLEE:
 			return Vector3.ZERO
 		_:
 			return repulse
@@ -69,37 +74,70 @@ func set_wander(agent: Agent) -> void:
 	agent.flee_state = State.WANDER
 	agent.state = "WANDER"
 	agent.set_debug_color(agent.color)
-	agent.set_clamped_movement_target(agent.wander_target)
+	agent.movement.unsprint()
+	agent.set_clamped_movement_target(get_high_spot(agent))
 
-func set_flee(agent: Agent, taggers: Array[Agent]) -> void:
+func set_alert(agent: Agent, taggers: Array[Agent]) -> void:
+	agent.flee_state = State.ALERT
+	agent.set_debug_color(Color.WHITE)
+	agent.movement.unsprint()
+
+	var high_spot := get_high_spot(agent)
+	var shake_target := get_shake_target(agent)
+	if shake_target != null and score_target(agent, shake_target.global_position, taggers, SHAKE_BUDDY_BONUS) > score_target(agent, high_spot, taggers):
+		agent.state = "ALERT_SHAKE"
+		agent.set_clamped_movement_target(shake_target.global_position)
+		return
+
+	agent.state = "ALERT_HIGH"
+	agent.set_clamped_movement_target(high_spot)
+
+func set_flee(agent: Agent, closest_tagger: Agent, refresh_memory: bool) -> void:
+	if refresh_memory:
+		flee_until_msec = Time.get_ticks_msec() + int(FLEE_MEMORY_SECONDS * 1000.0)
+
 	agent.flee_state = State.FLEE
 	agent.state = "FLEE"
-	agent.set_debug_color(agent.color)
-	agent.set_clamped_movement_target(get_best_safespot(agent, taggers))
-
-func set_panic(agent: Agent, closest_tagger: Agent) -> void:
-	agent.flee_state = State.PANIC
-	agent.state = "PANIC"
 	agent.set_debug_color(Color.DARK_RED)
+	agent.movement.sprint()
 	var direction_from_tagger := closest_tagger.global_position - agent.global_position
-	agent.set_clamped_movement_target(agent.global_position - direction_from_tagger * PANIC_TARGET_MULTIPLIER)
+	agent.set_clamped_movement_target(agent.global_position - direction_from_tagger * FLEE_TARGET_MULTIPLIER)
 
-func get_best_safespot(agent: Agent, taggers: Array[Agent]) -> Vector3:
-	if taggers.is_empty() or agent.manager.safe_spots.is_empty():
+func should_keep_fleeing() -> bool:
+	return Time.get_ticks_msec() < flee_until_msec
+
+func get_high_spot(agent: Agent) -> Vector3:
+	if agent.manager.safe_spots.is_empty():
 		return agent.wander_target
 
 	var best: Node3D = null
-	var best_score := -INF
 	for spot in agent.manager.safe_spots:
-		var dist_to_spot := agent.global_position.distance_to(spot.global_position)
-		var tagger_dist_to_spot := 0.0
-		for tagger in taggers:
-			tagger_dist_to_spot += tagger.global_position.distance_to(spot.global_position)
-		var score := tagger_dist_to_spot / len(taggers) - dist_to_spot / 5.0
-		if score > best_score:
-			best_score = score
+		if best == null or spot.global_position.y > best.global_position.y:
 			best = spot
 
 	if best == null:
 		return agent.wander_target
 	return best.global_position
+
+func get_shake_target(agent: Agent) -> Agent:
+	var closest_distance := INF
+	var closest_runner: Agent = null
+	for runner in agent.get_runners():
+		if runner == agent:
+			continue
+
+		if runner.flee_state == AgentFleeLogic.State.FLEE:
+			continue
+
+		var distance := runner.global_position.distance_squared_to(agent.global_position)
+
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_runner = runner
+	return closest_runner
+
+func score_target(agent: Agent, target: Vector3, taggers: Array[Agent], bonus := 0.0) -> float:
+	var score := bonus - agent.global_position.distance_to(target) * SAFE_SPOT_TRAVEL_WEIGHT
+	for tagger in taggers:
+		score += tagger.global_position.distance_to(target) / len(taggers)
+	return score

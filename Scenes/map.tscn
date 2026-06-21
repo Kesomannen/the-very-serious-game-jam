@@ -6,3 +6,9 @@
 
 [node name="floor" parent="." index="7" unique_id=1325975664]
 transform = Transform3D(-2444.1348, 0, 0, 0, 0.0001068365, 2444.1343, 0, -2444.1343, 0.0001068365, -1494.857, -5.175, -10.124)
+
+[node name="CollisionShape3D" parent="slide2/StaticBody3D" parent_id_path=PackedInt32Array(1920692982) index="0" unique_id=1341593287]
+disabled = true
+
+[node name="CollisionShape3D" parent="slide3/StaticBody3D" parent_id_path=PackedInt32Array(264734475) index="0" unique_id=966213219]
+disabled = true

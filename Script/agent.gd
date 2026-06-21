@@ -11,7 +11,7 @@ extends CharacterBody3D
 @onready var navigation_agent: NavigationAgent3D = get_node("NavigationAgent3D")
 
 var chase_state := AgentChaseLogic.State.IDLE
-var flee_state := AgentFleeLogic.State.WANDER
+@export var flee_state := AgentFleeLogic.State.WANDER
 var wander_target := Vector3.ZERO
 var sliding := false
 var mat: Material
@@ -25,16 +25,19 @@ func _ready() -> void:
 	$MeshInstance3D.set_surface_override_material(0, mat)
 	mat.albedo_color = color
 	navigation_agent.velocity_computed.connect(Callable(_on_velocity_computed))
+	movement.randomize_stamina()
 	pick_new_wander_target()
 	update_behavior_state()
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if sliding:
 		return
 
 	if NavigationServer3D.map_get_iteration_id(navigation_agent.get_navigation_map()) == 0:
+		movement.update(delta, 0.0)
 		return
 	if navigation_agent.is_navigation_finished():
+		movement.update(delta, 0.0)
 		return
 
 	flee_logic.update_wander_target(self)
@@ -43,6 +46,8 @@ func _physics_process(_delta: float) -> void:
 	var speed := movement_speed
 	if not is_it:
 		speed = flee_logic.get_speed(self)
+	speed = movement.get_modified_speed(speed)
+	movement.update(delta, speed)
 
 	var desired_velocity := movement.get_desired_velocity(self, navigation_agent, speed, steering)
 	if navigation_agent.avoidance_enabled:
