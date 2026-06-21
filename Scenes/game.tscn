@@ -86,6 +86,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1174583, 6.3, -3.368085)
 transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
 
 [node name="Player" parent="." unique_id=1913763412 instance=ExtResource("4_wowpa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9089975, 17.822548)
 
 [node name="BetManager" type="Node" parent="." unique_id=108292606]
 script = ExtResource("5_wowpa")
