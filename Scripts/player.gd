@@ -22,6 +22,7 @@ var state: State
 
 var _pitch: float
 var _default_fov: float
+var _start_pos: Vector3
 
 var sliding = false
 
@@ -36,6 +37,7 @@ func _ready() -> void:
 	camera.current = true
 	_default_fov = camera.fov
 	_pitch = camera.rotation.x
+	_start_pos = position
 	enter(starting_state)
 
 func enter(new_state: State):
@@ -53,9 +55,13 @@ func enter(new_state: State):
 		State.Running, State.Freecam, State.Scouting:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	if new_state == State.Running:
-		speed_multiplier = 1.5
-		get_tree().create_tween().tween_property(self, "speed_multiplier", 1.0, 0.8)
+	match new_state:
+		State.Running:
+			speed_multiplier = 1.5
+			get_tree().create_tween().tween_property(self, "speed_multiplier", 1.0, 0.8)
+		State.Betting:
+			position = _start_pos
+			rotation = Vector3.ZERO
 	
 	state = new_state
 

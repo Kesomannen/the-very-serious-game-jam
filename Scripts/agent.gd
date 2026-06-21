@@ -30,10 +30,8 @@ func _ready() -> void:
 	mat.albedo_color = color
 	navigation_agent.velocity_computed.connect(Callable(_on_velocity_computed))
 	movement.randomize_stamina()
-	pick_new_wander_target()
-	update_behavior_state()
 	set_active(_active)
-
+	reset()
 
 func _physics_process(delta: float) -> void:
 	if !_active:
@@ -143,3 +141,8 @@ func pick_new_wander_target() -> void:
 func set_active(active: bool):
 	_active = active
 	$TagArea.process_mode = Node.PROCESS_MODE_INHERIT if _active else Node.PROCESS_MODE_DISABLED
+
+func reset():
+	is_it = false
+	set_debug_color(color)
+	pick_new_wander_target()

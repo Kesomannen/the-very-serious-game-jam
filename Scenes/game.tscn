@@ -6,6 +6,20 @@
 [ext_resource type="PackedScene" uid="uid://c1tortkjbcuha" path="res://Scenes/player.tscn" id="5_i6g32"]
 [ext_resource type="Script" uid="uid://b5wtsa44ye62f" path="res://Scripts/bet_manager.gd" id="5_wowpa"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_wowpa"]
+font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_i6g32"]
+font_size = 40
+
+[sub_resource type="Theme" id="Theme_wowpa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i6g32"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
 [node name="Node3D" type="Node3D" unique_id=1816040432]
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=116938391]
@@ -14,8 +28,61 @@ transform = Transform3D(0.83676434, 0.5040346, -0.21394995, 0, 0.39073107, 0.920
 [node name="BetManager" type="Node" parent="." unique_id=108292606 node_paths=PackedStringArray("lineup_point")]
 script = ExtResource("5_wowpa")
 lineup_point = NodePath("../LineupPoint")
-spacing = 1.2
+spacing = 1.5
 hover_height = 0.3
+
+[node name="BetUI" type="Control" parent="BetManager" unique_id=471449823]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="BetManager/BetUI" unique_id=760995160]
+layout_mode = 0
+offset_left = 472.0
+offset_top = 291.0
+offset_right = 677.0
+offset_bottom = 337.0
+text = "Bet"
+label_settings = SubResource("LabelSettings_wowpa")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Amount" type="Label" parent="BetManager/BetUI" unique_id=450133581]
+layout_mode = 0
+offset_left = 472.0
+offset_top = 380.0
+offset_right = 677.0
+offset_bottom = 435.0
+text = "$100/$200"
+label_settings = SubResource("LabelSettings_i6g32")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slider" type="HSlider" parent="BetManager/BetUI" unique_id=1332714166]
+layout_mode = 0
+offset_left = 373.0
+offset_top = 342.0
+offset_right = 788.0
+offset_bottom = 368.0
+theme = SubResource("Theme_wowpa")
+theme_override_styles/slider = SubResource("StyleBoxFlat_i6g32")
+
+[node name="Button" type="Button" parent="BetManager/BetUI" unique_id=1628789775]
+layout_mode = 0
+offset_left = 511.0
+offset_top = 462.0
+offset_right = 636.0
+offset_bottom = 490.0
+text = "Place"
 
 [node name="Manager" type="Node" parent="." unique_id=902847566 node_paths=PackedStringArray("children", "starting_spots", "safe_spots")]
 unique_name_in_owner = true
@@ -92,9 +159,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1174583, 6.3, -3.368085)
 transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
 
 [node name="LineupPoint" type="Node3D" parent="." unique_id=85703367]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8428072, 16.67328)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8428072, 14.15447)
 
 [node name="Player" parent="." unique_id=1913763412 instance=ExtResource("5_i6g32")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.716, 24.04147)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.716, 20.36976)
 starting_state = 0
+
+[connection signal="value_changed" from="BetManager/BetUI/Slider" to="BetManager" method="_on_slider_value_changed"]
+[connection signal="pressed" from="BetManager/BetUI/Button" to="BetManager" method="_on_button_pressed"]

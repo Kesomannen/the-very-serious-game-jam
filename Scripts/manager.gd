@@ -43,6 +43,7 @@ func stop_playing():
 		print("Tried to stop game while not playing!")
 		return
 	set_children_active(false)
+	reset_children()
 	is_playing = false
 	print("Game stopped!")
 
@@ -54,14 +55,16 @@ func spawn_children_randomly():
 		child.position = spot.position
 
 func pick_chaser():
-	for child in children:
-		child.is_it = false
-	
 	var index = randi_range(0, len(children) - 1)
 	var child = children[index]
 	child.is_it = true
+	child.set_debug_color(Color.RED)
 	print(child.name, " is the chaser")
 
 func set_children_active(active: bool):
 	for child in children:
 		child.set_active(active)
+
+func reset_children():
+	for child in children:
+		child.reset()
