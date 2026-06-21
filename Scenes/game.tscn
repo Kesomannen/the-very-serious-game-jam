@@ -13,12 +13,16 @@ transform = Transform3D(0.83676434, 0.5040346, -0.21394995, 0, 0.39073107, 0.920
 
 [node name="BetManager" type="Node" parent="." unique_id=108292606 node_paths=PackedStringArray("lineup_point")]
 script = ExtResource("5_wowpa")
-spacing = 1.2
 lineup_point = NodePath("../LineupPoint")
+spacing = 1.2
+hover_height = 0.3
 
-[node name="Manager" type="Node" parent="." unique_id=902847566]
+[node name="Manager" type="Node" parent="." unique_id=902847566 node_paths=PackedStringArray("children", "starting_spots", "safe_spots")]
 unique_name_in_owner = true
 script = ExtResource("3_3dryh")
+children = [NodePath("Green"), NodePath("Blue"), NodePath("Pink"), NodePath("Purple"), NodePath("Orange"), NodePath("Cyan")]
+starting_spots = [NodePath("StartingSpots/StartingSpot1"), NodePath("StartingSpots/StartingSpot2"), NodePath("StartingSpots/StartingSpot3"), NodePath("StartingSpots/StartingSpot4"), NodePath("StartingSpots/StartingSpot5"), NodePath("StartingSpots/StartingSpot6")]
+safe_spots = [NodePath("SafeSpots/SafeSpot1"), NodePath("SafeSpots/SafeSpot2"), NodePath("SafeSpots/SafeSpot3"), NodePath("SafeSpots/SafeSpotHigh")]
 
 [node name="Green" parent="Manager" unique_id=997781014 node_paths=PackedStringArray("manager") instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3377075, 0.73119307, -6.867942)
@@ -88,9 +92,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1174583, 6.3, -3.368085)
 transform = Transform3D(1.0005554, 0, 0, 0, 1.0005554, 0, 0, 0, 1.0005554, -1.5207062, 0, -0.66938114)
 
 [node name="LineupPoint" type="Node3D" parent="." unique_id=85703367]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8428072, 14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8428072, 16.67328)
 
 [node name="Player" parent="." unique_id=1913763412 instance=ExtResource("5_i6g32")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.716, 19.743)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.716, 24.04147)
 starting_state = 0

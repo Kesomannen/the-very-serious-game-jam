@@ -17,6 +17,7 @@ extends CharacterBody3D
 
 @onready var camera: Camera3D = $Camera3D
 
+var speed_multiplier := 1.0
 var state: State
 
 var _pitch: float
@@ -35,13 +36,10 @@ func _ready() -> void:
 	camera.current = true
 	_default_fov = camera.fov
 	_pitch = camera.rotation.x
-	_enter(starting_state)
+	enter(starting_state)
 
-func enter_scouting():
-	_enter(State.Scouting)
-
-func _enter(new_state: State):
-	match state:
+func enter(new_state: State):
+	match new_state:
 		State.Scouting:
 			camera.fov = scout_fov
 		State.Betting:
@@ -54,18 +52,25 @@ func _enter(new_state: State):
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		State.Running, State.Freecam, State.Scouting:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	if new_state == State.Running:
+		speed_multiplier = 1.5
+		get_tree().create_tween().tween_property(self, "speed_multiplier", 1.0, 0.8)
+	
 	state = new_state
 
 func _physics_process(delta: float) -> void:
 	match state:
-		State.Betting:
-			pass
 		State.Scouting:
-			pass
+			_scouting_physics_process(delta)
 		State.Running:
 			_running_physics_process(delta)
 		State.Freecam:
 			_freecam_physics_process(delta)
+
+func _scouting_physics_process(delta: float):
+	if Input.is_action_just_pressed("jump"):
+		enter(State.Running)
 
 func _running_physics_process(delta: float):
 	if sliding:
@@ -82,12 +87,14 @@ func _running_physics_process(delta: float):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var speed := movement_speed * speed_multiplier
+	camera.fov = _default_fov * sqrt(speed_multiplier)
 	if direction:
-		velocity.x = direction.x * movement_speed
-		velocity.z = direction.z * movement_speed
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, movement_speed)
-		velocity.z = move_toward(velocity.z, 0, movement_speed)
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
 

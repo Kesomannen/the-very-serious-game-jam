@@ -14,7 +14,6 @@ func _ready():
 
 func _on_runner_won(runner: Agent):
 	await get_tree().create_timer(2.0).timeout
-	new_round()
 
 func lineup_children():
 	var child_count = len(manager.children)
@@ -35,7 +34,7 @@ func new_round():
 	
 	manager.pick_chaser()
 	manager.start_playing()
-	(%Player as Player).enter_scouting()
+	(%Player as Player).enter(Player.State.Scouting)
 
 func _on_child_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int, child: Agent) -> void:
 	if event is not InputEventMouseButton:
